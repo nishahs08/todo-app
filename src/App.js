@@ -1,62 +1,59 @@
-import { useState } from "react";
+
+import AddTodo from './components/AddTodo';
+import ListTodo from './components/ListTodo';
+import Nav from './components/Nav';
+import './App.css';
+import { useState } from 'react';
 
 
 function App() {
-  const [enteredTodo, setEnteredTodo] = useState('');
-  const [todoList, setTodoList] = useState([]);
-  
+    const [todos, setTodos] = useState([]);
+    const [categories, setCategories] = useState([
+        { label: 'Home', value: 'Home' },
+        { label: 'Office', value: 'Office' },
+        { label: 'School', value: 'School' }
+    ]);
+    const [selectedMenu, setSelectedMenu] = useState('list');
+    const [editState,setEditState] =useState()
+    function deleteTodo(id) {
+        console.log("DELETED")
+        const updatedTodos = todos.filter(todo => todo.id !== id);
+        setTodos([...updatedTodos]);
+    }
+    // function editTodo(id,todo) {
+    //     const updatedTodos = todos.filter(todo => todo.id !== id);
+    //     setTodos([...updatedTodos,todo]);
+    // }
 
-  function addTodo() {
-    setTodoList([...todoList, { name: enteredTodo, id: todoList.length + 1, done: false }])
-    setEnteredTodo('')
-  }
+    function editTodo(id){
+        if(id){
+            setEditState(true)
+        }
+    }
+    return (
+        <>
+            <div className='wrapper'>
+                <Nav
+                    selectedMenu={selectedMenu}
+                    setSelectedMenu={setSelectedMenu}
+                />
 
-  function done(t) {
-    setTodoList(todoList.map((todo) => {
-      if (todo.id === t.id) {
-        todo.done = true;
-      }
-      return todo;
-    }))
-  }
-
-  function unDone(t) {
-    setTodoList(todoList.map((todo) => {
-      if (todo.id === t.id) {
-        todo.done = false;
-      }
-      return todo;
-    }))
-  }
-
-  
-
-  let list = todoList.filter(todo => !todo.done).map((todo) => <li key={todo.id}>
-    <input type='checkbox' id={todo.id} checked={todo.done} onChange={(e) => done(todo)}></input>
-    <label htmlFor={todo.id}>{todo.name}</label>
-  </li>)
-
-  let completedList = todoList.filter(todod => todod.done).map((item, index) =>
-    <li key={item.id}>
-      <input type='checkbox' id={item.id} checked={item.done} onChange={(e) => unDone(item)}></input>
-      <label htmlFor={item.id}>{item.name}</label>
-    </li>
-  )
-
-  return <div>
-    <div>
-      <input type='text' placeholder="What's on your mind" value={enteredTodo} onChange={(e) => setEnteredTodo(e.target.value)} />
-      <button onClick={addTodo}> Add a todo</button>
-    </div>
-    <ul style={{ backgroundColor: 'yellow', listStyle: 'none' }}>
-      {list}
-    </ul>
-    <ul style={{ backgroundColor: 'green' }}>
-      {completedList}
-    </ul>
-  </div>
-
-
+                {(selectedMenu === 'addTodo') &&
+                    <AddTodo
+                        addTodo={todo => setTodos([...todos, todo])}
+                        categories={categories}
+                        setCategories={setCategories} />
+                }
+                {(selectedMenu === 'list') &&
+                    <ListTodo
+                        todos={todos}
+                        setTodos={setTodos}
+                        deleteTodo = {(id)=>deleteTodo(id)}
+                        editTodo = {(id)=>editTodo()}
+                    />
+                }
+            </div>
+        </>
+    )
 }
-
 export default App;

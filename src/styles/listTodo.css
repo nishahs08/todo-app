@@ -1,0 +1,18 @@
+
+
+.listTodo-date{
+    padding:5px
+}
+.listTodo-dateContainer{
+  margin-top:20px;
+  width:fit-content;
+  color: #4F4F4F;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  background: #FFFFFF;
+  border: 1px solid #C4C4C4;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
